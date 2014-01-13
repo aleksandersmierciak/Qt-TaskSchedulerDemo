@@ -1,0 +1,12 @@
+#ifndef SCHEDULING_GLOBAL_H
+#define SCHEDULING_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(SCHEDULING_LIBRARY)
+#  define SCHEDULINGSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define SCHEDULINGSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // SCHEDULING_GLOBAL_H
