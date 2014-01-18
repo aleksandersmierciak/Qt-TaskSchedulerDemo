@@ -11,6 +11,7 @@ ApplicationWindow {
     ListModel {
         id: jobModel
         property int currentIndex: 0
+
     }
 
     Component {
@@ -19,9 +20,22 @@ ApplicationWindow {
             width: 110
             height: 45
 
+            MouseArea {
+                anchors.fill: parent
+                onClicked: jobs.currentIndex = index
+            }
+
             Column {
                 Text { text: '<b>Job #</b>' + name }
-                TextField { validator: IntValidator {bottom: 1; top: 100;} }
+                TextField {
+                    text: duration
+                    validator: IntValidator {bottom: 1; top: 100;}
+                    onFocusChanged: {
+                        if (focus == false) {
+                            jobModel.setProperty(index, "duration", parseInt(text, 10))
+                        }
+                    }
+                }
             }
         }
     }
@@ -52,7 +66,7 @@ ApplicationWindow {
             text: qsTr("Add job")
             onClicked: {
                 ++jobModel.currentIndex
-                jobModel.append({"name": jobModel.currentIndex, "duration": 3})
+                jobModel.append({"name": jobModel.currentIndex, "duration": 0})
             }
 
             Layout.column: 0
