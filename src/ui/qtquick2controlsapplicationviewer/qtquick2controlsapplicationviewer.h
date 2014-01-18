@@ -15,6 +15,8 @@
 #include <QGuiApplication>
 #endif
 
+#include <QQmlContext>
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_WIDGETS
@@ -34,6 +36,9 @@ public:
     void setMainQmlFile(const QString &file);
     void addImportPath(const QString &path);
     void show();
+
+    // Added manually
+    QQmlContext *rootContext();
 
 private:
     class QtQuick2ApplicationViewerPrivate *d;

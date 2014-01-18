@@ -100,3 +100,8 @@ void QtQuick2ControlsApplicationViewer::show()
     if (d->window)
         d->window->show();
 }
+
+QQmlContext *QtQuick2ControlsApplicationViewer::rootContext()
+{
+    return d->engine.rootContext();
+}
