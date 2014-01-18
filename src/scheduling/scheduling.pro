@@ -5,10 +5,14 @@ TEMPLATE = lib
 
 DEFINES += SCHEDULING_LIBRARY
 
-SOURCES += taskscheduler.cpp
+SOURCES += \
+    job.cpp \
+    taskscheduler.cpp
 
-HEADERS += taskscheduler.h\
-        scheduling_global.h
+HEADERS += \
+    scheduling_global.h \
+    job.h \
+    taskscheduler.h
 
 unix {
     target.path = /usr/lib
