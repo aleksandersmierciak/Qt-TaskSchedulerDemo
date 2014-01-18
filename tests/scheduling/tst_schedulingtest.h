@@ -12,7 +12,7 @@ public:
     SchedulingTest();
 
 private Q_SLOTS:
-    void testCase1();
+    void testScheduling();
 };
 
 #endif // TST_SCHEDULINGTEST_H
