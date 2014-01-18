@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-01-13T22:41:35
-#
-#-------------------------------------------------
-
 QT       += testlib
 
 QT       -= gui
@@ -15,5 +9,20 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += tst_schedulingtest.cpp
+SOURCES += \
+    main.cpp \
+    tst_schedulingtest.cpp \
+    tst_jobtest.cpp
+
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+HEADERS += \
+    tst_schedulingtest.h \
+    tst_jobtest.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../src/scheduling/release/ -lscheduling
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../src/scheduling/debug/ -lscheduling
+else:unix: LIBS += -L$$OUT_PWD/../../src/scheduling/ -lscheduling
+
+INCLUDEPATH += $$PWD/../../src/scheduling
+DEPENDPATH += $$PWD/../../src/scheduling
