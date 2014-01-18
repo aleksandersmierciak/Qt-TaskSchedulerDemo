@@ -11,6 +11,7 @@ public:
 
     int id() const;
     unsigned int duration() const;
+    unsigned int durationLeft() const;
     QList<QSharedPointer<Job> > jobs() const;
 
     bool tryAdd(QSharedPointer<Job>);

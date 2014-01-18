@@ -20,6 +20,11 @@ unsigned int Machine::duration() const
     return m_duration;
 }
 
+unsigned int Machine::durationLeft() const
+{
+    return m_durationLeft;
+}
+
 QList<QSharedPointer<Job> > Machine::jobs() const
 {
     return m_jobs;
