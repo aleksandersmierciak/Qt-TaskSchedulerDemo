@@ -63,7 +63,7 @@ ApplicationWindow {
         Button {
             text: qsTr("Remove job")
             onClicked: {
-                jobModel.remove(jobs.currentIndex)
+                if (jobs.currentIndex > -1) jobModel.remove(jobs.currentIndex)
             }
 
             Layout.column: 0
