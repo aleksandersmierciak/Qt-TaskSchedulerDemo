@@ -2,14 +2,17 @@
 #define TASKSCHEDULER_H
 
 #include <QList>
+#include <QObject>
 #include <QSharedPointer>
 #include "scheduling_global.h"
 #include "machine.h"
 
-class SCHEDULINGSHARED_EXPORT TaskScheduler
+class SCHEDULINGSHARED_EXPORT TaskScheduler : public QObject
 {
+    Q_OBJECT
+
 public:
-    TaskScheduler();
+    TaskScheduler(QObject *parent = 0);
 
     void schedule(int machineCount, QList<QSharedPointer<Job> > jobs);
 

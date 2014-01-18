@@ -4,7 +4,8 @@
 #include "taskscheduler.h"
 
 
-TaskScheduler::TaskScheduler()
+TaskScheduler::TaskScheduler(QObject *parent)
+    : QObject(parent)
 {
 }
 
