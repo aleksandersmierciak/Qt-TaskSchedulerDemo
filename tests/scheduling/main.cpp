@@ -9,6 +9,9 @@ int main()
     JobTest jobTest;
     QTest::qExec(&jobTest);
 
+    MachineTest machineTest;
+    QTest::qExec(&machineTest);
+
     SchedulingTest schedulingTest;
     QTest::qExec(&schedulingTest);
 
