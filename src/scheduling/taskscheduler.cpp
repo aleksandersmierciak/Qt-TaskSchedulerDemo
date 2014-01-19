@@ -37,6 +37,7 @@ void TaskScheduler::initializeJobs(QList<int> jobDurations)
     {
         throw std::invalid_argument("One or more jobs need to be provided");
     }
+    m_jobs.clear();
     for (int i = 0; i < jobDurations.size(); ++i)
     {
         m_jobs.append(QSharedPointer<Job>(new Job(i, jobDurations.at(i))));
