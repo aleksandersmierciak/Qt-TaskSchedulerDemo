@@ -11,7 +11,6 @@ ApplicationWindow {
     ListModel {
         id: jobModel
         property int currentIndex: 0
-
     }
 
     Component {
@@ -95,7 +94,9 @@ ApplicationWindow {
                 for(var i = 0; i < jobs.model.count; ++i)
                     parameters[i] = parseInt(jobs.model.get(i).duration, 10)
 
+                canvas.enabled = true
                 taskScheduler.schedule(parseInt(machineCount.text, 10), parameters)
+                canvas.drawChart()
             }
 
             Layout.column: 0
@@ -126,6 +127,13 @@ ApplicationWindow {
         Canvas {
             id: canvas
             antialiasing: true
+            enabled: false
+
+            property int blockCount: 30
+            property int block: canvas.width / blockCount
+            property var context
+
+            property var colors: ['blueviolet', 'limegreen', 'crimson', 'orange', 'hotpink', 'tomato', 'darkturquoise', 'olive', 'burlywood', 'aquamarine', 'lightseagreen', 'brown', 'burlywood']
 
             Layout.minimumWidth: 300
             Layout.minimumHeight: 300
@@ -136,6 +144,82 @@ ApplicationWindow {
             Layout.column: 1
             Layout.row: 0
             Layout.rowSpan: 6
+
+            onPaint: drawChart()
+
+            function drawChart() {
+                context = canvas.getContext("2d")
+                context.clearRect(0, 0, canvas.width, canvas.height)
+
+                drawAxes()
+                drawGrid()
+                drawData()
+                drawLegend()
+            }
+
+            function drawAxes() {
+                context.lineWidth = 5
+                context.beginPath();
+                context.moveTo( block, block)
+                context.lineTo( block, canvas.height - block)
+                context.lineTo(canvas.width - block, canvas.height - block)
+                context.strokeStyle = "#EE000000"
+                context.stroke()
+            }
+
+            function drawGrid() {
+                context.lineWidth = 2
+                context.beginPath();
+                // Vertical grid lines
+                for (var i = blockCount - 1; i > 0; --i) {
+                    context.moveTo( block + i * block, block)
+                    context.lineTo( block + i * block, canvas.height - block)
+                }
+                // Horizontal grid lines
+                for (var j = 2; j < blockCount; ++j) {
+                    context.moveTo( block, canvas.height - j * block)
+                    context.lineTo( canvas.width - block, canvas.height - j * block)
+                }
+                context.strokeStyle = "#44000000"
+                context.stroke()
+            }
+
+            function drawData() {
+                console.log("Drawing data")
+                context.lineWidth = 5
+                var results = taskScheduler.getResults()
+                console.log(results.length + " machines found")
+                for (var machine = 0; machine < results.length; ++machine) {
+                    console.log("Drawing series #" + machine)
+                    drawSeries(results[machine], block, canvas.height - 2 * block * (machine + 2))
+                }
+            }
+
+            function drawSeries(machine, x, y) {
+                console.log(machine.length + " jobs found")
+                context.beginPath();
+                for (var job = 0; job < machine.length; ++job) {
+                    drawJob(machine[job], job, x, y)
+                    x += block * machine[job]
+                }
+                context.lineWidth = 2
+                context.strokeStyle = "#AA000000"
+                context.stroke();
+            }
+
+            function drawJob(duration, color, x, y) {
+                console.log("Drawing rectangle of " + duration + " duration")
+                context.rect(x, y, duration * block, block)
+                context.fillStyle = colors[color]
+                console.log(colors[color])
+                //context.fillStyle = Qt.rgba(Math.random(), Math.random(), Math.random(), Math.random())
+                context.fill()
+            }
+
+            function drawLegend() {
+                context.beginPath();
+                context.fill()
+            }
         }
 
         Keys.onPressed: {
