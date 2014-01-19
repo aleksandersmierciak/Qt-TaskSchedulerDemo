@@ -54,8 +54,10 @@ ApplicationWindow {
         }
 
         TextField {
+            id: machineCount
             validator: IntValidator {bottom: 1; top: 100;}
             focus: true
+            text: "1"
 
             Layout.column: 0
             Layout.row: 1
@@ -66,7 +68,7 @@ ApplicationWindow {
             text: qsTr("Add job")
             onClicked: {
                 ++jobModel.currentIndex
-                jobModel.append({"name": jobModel.currentIndex, "duration": 0})
+                jobModel.append({"name": jobModel.currentIndex, "duration": 1})
             }
 
             Layout.column: 0
@@ -87,8 +89,13 @@ ApplicationWindow {
 
         Button {
             text: qsTr("Schedule")
+            enabled: jobModel.count > 0 && machineCount.text != ""
             onClicked: {
-                console.log("Schedule clicked")
+                var parameters = []
+                for(var i = 0; i < jobs.model.count; ++i)
+                    parameters[i] = parseInt(jobs.model.get(i).duration, 10)
+
+                taskScheduler.schedule(parseInt(machineCount.text, 10), parameters)
             }
 
             Layout.column: 0
