@@ -9,7 +9,7 @@ TaskScheduler::TaskScheduler(QObject *parent)
 {
 }
 
-void TaskScheduler::schedule(int machineCount, QList<int> jobDurations)
+void TaskScheduler::schedule(unsigned int machineCount, QList<unsigned int> jobDurations)
 {
     initializeMachines(machineCount);
     initializeJobs(jobDurations);
@@ -31,7 +31,7 @@ void TaskScheduler::initializeMachines(const unsigned int size)
     }
 }
 
-void TaskScheduler::initializeJobs(QList<int> jobDurations)
+void TaskScheduler::initializeJobs(QList<unsigned int> jobDurations)
 {
     if (jobDurations.size() == 0)
     {
@@ -62,29 +62,26 @@ void TaskScheduler::assignJobs()
 {
     QListIterator<QSharedPointer<Machine> > machineIterator(m_machines);
     QListIterator<QSharedPointer<Job> > jobIterator(m_jobs);
-    while (jobIterator.hasNext())
+    while (machineIterator.hasNext())
     {
-        Machine &machine = *machineIterator.peekNext();
-        QSharedPointer<Job> job = jobIterator.peekNext();
-        if (!machine.tryAdd(job))
+        Machine &machine = *machineIterator.next();
+        while (jobIterator.hasNext())
         {
-            unsigned int durationLeft = machine.durationLeft();
-            if (durationLeft > 0)
+            QSharedPointer<Job> job = jobIterator.next();
+            if (machine.canAdd(job))
             {
-                QSharedPointer<Job> splitJob = job.data()->split(durationLeft);
                 machine.add(job);
-                machineIterator.next();
-                machineIterator.peekNext().data()->add(splitJob);
-                jobIterator.next();
             }
             else
             {
-                machineIterator.next();
+                unsigned int durationLeft = machine.durationLeft();
+                if (durationLeft > 0)
+                {
+                    QSharedPointer<Job> splitJob = job.data()->split(durationLeft);
+                    machine.add(splitJob);
+                    break;
+                }
             }
-        }
-        else
-        {
-            jobIterator.next();
         }
     }
 }
