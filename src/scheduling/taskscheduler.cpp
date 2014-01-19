@@ -9,7 +9,7 @@ TaskScheduler::TaskScheduler(QObject *parent)
 {
 }
 
-void TaskScheduler::schedule(unsigned int machineCount, QList<unsigned int> jobDurations)
+void TaskScheduler::schedule(unsigned int machineCount, QList<int> jobDurations)
 {
     initializeMachines(machineCount);
     initializeJobs(jobDurations);
@@ -31,7 +31,7 @@ void TaskScheduler::initializeMachines(const unsigned int size)
     }
 }
 
-void TaskScheduler::initializeJobs(QList<unsigned int> jobDurations)
+void TaskScheduler::initializeJobs(QList<int> jobDurations)
 {
     if (jobDurations.size() == 0)
     {
