@@ -12,7 +12,12 @@ public:
     SchedulingTest();
 
 private Q_SLOTS:
-    void testScheduling();
+    void testCannotCreate_data();
+    void testCannotCreate();
+    void testCanSchedule_data();
+    void testCanSchedule();
+    void testCanScheduleMultipleTimes_data();
+    void testCanScheduleMultipleTimes();
 };
 
 #endif // TST_SCHEDULINGTEST_H
