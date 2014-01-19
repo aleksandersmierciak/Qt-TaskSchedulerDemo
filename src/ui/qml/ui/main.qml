@@ -155,6 +155,7 @@ ApplicationWindow {
                 drawGrid()
                 drawData()
                 drawLegend()
+                canvas.requestPaint()
             }
 
             function drawAxes() {
