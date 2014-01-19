@@ -9,18 +9,26 @@ TaskScheduler::TaskScheduler(QObject *parent)
 {
 }
 
-void TaskScheduler::schedule(int machineCount, QList<int> jobs)
+void TaskScheduler::schedule(int machineCount, QList<int> jobDurations)
 {
-    if (machineCount == 0)
+    initializeMachines(machineCount);
+    initializeJobs(jobDurations);
+
+    calculateMaxTime();
+    assignJobs();
+}
+
+void TaskScheduler::initializeMachines(const unsigned int size)
+{
+    if (size == 0)
     {
         throw std::invalid_argument("One or more machines need to be provided");
     }
-    initializeJobs(jobs);
-    m_machineCount = machineCount;
-
-    calculateMaxTime();
-    initializeMachines();
-    assignJobs();
+    m_machines.clear();
+    for (unsigned int i = 0; i < size; ++i)
+    {
+        m_machines.append(QSharedPointer<Machine>(new Machine(i, m_maxTime)));
+    }
 }
 
 void TaskScheduler::initializeJobs(QList<int> jobDurations)
@@ -35,20 +43,6 @@ void TaskScheduler::initializeJobs(QList<int> jobDurations)
     }
 }
 
-void TaskScheduler::initializeMachines()
-{
-    clear();
-    for (unsigned int i = 0; i < m_machineCount; ++i)
-    {
-        m_machines.append(QSharedPointer<Machine>(new Machine(i, m_maxTime)));
-    }
-}
-
-void TaskScheduler::clear()
-{
-    m_machines.clear();
-}
-
 void TaskScheduler::calculateMaxTime()
 {
     unsigned int maxTime = 0;
@@ -58,7 +52,7 @@ void TaskScheduler::calculateMaxTime()
         maxTime = std::max(maxTime, job.data()->duration());
         totalDuration += job.data()->duration();
     }
-    totalDuration /= m_machineCount;
+    totalDuration /= m_machines.size();
 
     m_maxTime = std::max(maxTime, totalDuration);
 }

@@ -14,17 +14,15 @@ class SCHEDULINGSHARED_EXPORT TaskScheduler : public QObject
 public:
     TaskScheduler(QObject *parent = 0);
 
-    Q_INVOKABLE void schedule(int machineCount, QList<int> jobs);
+    Q_INVOKABLE void schedule(int , QList<int> );
 
 private:
     unsigned int m_maxTime;
-    unsigned int m_machineCount;
     QList<QSharedPointer<Machine> > m_machines;
     QList<QSharedPointer<Job> > m_jobs;
 
+    void initializeMachines(const unsigned int );
     void initializeJobs(QList<int> );
-    void initializeMachines();
-    void clear();
     void calculateMaxTime();
     void assignJobs();
 };
