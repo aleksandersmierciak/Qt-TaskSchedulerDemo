@@ -197,23 +197,21 @@ ApplicationWindow {
 
             function drawSeries(machine, x, y) {
                 console.log(machine.length + " jobs found")
-                context.beginPath();
                 for (var job = 0; job < machine.length; ++job) {
-                    drawJob(machine[job], job, x, y)
-                    x += block * machine[job]
+                    drawJob(machine[job][0], machine[job][1], x, y)
+                    x += block * machine[job][1]
                 }
+            }
+
+            function drawJob(id, duration, x, y) {
+                context.beginPath();
+                console.log("Job: id " + id + ", color " + colors[id] + ", duration " + duration)
+                context.rect(x, y, duration * block, block)
+                context.fillStyle = colors[id]
+                context.fill()
                 context.lineWidth = 2
                 context.strokeStyle = "#AA000000"
                 context.stroke();
-            }
-
-            function drawJob(duration, color, x, y) {
-                console.log("Drawing rectangle of " + duration + " duration")
-                context.rect(x, y, duration * block, block)
-                context.fillStyle = colors[color]
-                console.log(colors[color])
-                //context.fillStyle = Qt.rgba(Math.random(), Math.random(), Math.random(), Math.random())
-                context.fill()
             }
 
             function drawLegend() {

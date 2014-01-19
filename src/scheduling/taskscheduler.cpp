@@ -26,7 +26,7 @@ QVariantList TaskScheduler::getResults()
         QVariantList innerList;
         for (auto job : machine.data()->jobs())
         {
-            innerList.append(QVariant(job.data()->duration()));
+            innerList.append(QVariant(QVariantList({job.data()->id(), job.data()->duration()})));
         }
         results.append(QVariant(innerList));
     }
