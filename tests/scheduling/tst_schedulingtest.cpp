@@ -11,11 +11,11 @@ SchedulingTest::SchedulingTest()
 void SchedulingTest::testScheduling()
 {
     TaskScheduler scheduler;
-    QList<QSharedPointer<Job> > jobs;
+    QList<int> jobDurations;
     for (int i = 1; i <= 50; ++i)
     {
-        jobs.append(QSharedPointer<Job>(new Job(i, i)));
+        jobDurations.append(i);
     }
-    scheduler.schedule(15, jobs);
+    scheduler.schedule(15, jobDurations);
     QVERIFY2(true, "Failure");
 }

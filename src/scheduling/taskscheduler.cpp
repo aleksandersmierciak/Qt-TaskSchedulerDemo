@@ -9,23 +9,30 @@ TaskScheduler::TaskScheduler(QObject *parent)
 {
 }
 
-void TaskScheduler::schedule(int machineCount, QList<QSharedPointer<Job> > jobs)
+void TaskScheduler::schedule(int machineCount, QList<int> jobs)
 {
-    if (jobs.count() == 0)
-    {
-        throw std::invalid_argument("One or more jobs need to be provided");
-    }
-    if (m_machineCount == 0)
+    if (machineCount == 0)
     {
         throw std::invalid_argument("One or more machines need to be provided");
     }
-
-    m_jobs = jobs;
+    initializeJobs(jobs);
     m_machineCount = machineCount;
 
     calculateMaxTime();
     initializeMachines();
     assignJobs();
+}
+
+void TaskScheduler::initializeJobs(QList<int> jobDurations)
+{
+    if (jobDurations.size() == 0)
+    {
+        throw std::invalid_argument("One or more jobs need to be provided");
+    }
+    for (int i = 0; i < jobDurations.size(); ++i)
+    {
+        m_jobs.append(QSharedPointer<Job>(new Job(i, jobDurations.at(i))));
+    }
 }
 
 void TaskScheduler::initializeMachines()
