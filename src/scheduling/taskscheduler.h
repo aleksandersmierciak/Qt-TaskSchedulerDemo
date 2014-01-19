@@ -4,6 +4,7 @@
 #include <QList>
 #include <QObject>
 #include <QSharedPointer>
+#include <QVariantList>
 #include "scheduling_global.h"
 #include "machine.h"
 
@@ -15,6 +16,7 @@ public:
     TaskScheduler(QObject *parent = 0);
 
     Q_INVOKABLE void schedule(unsigned int , QList<int> );
+    Q_INVOKABLE QVariantList getResults();
 
 private:
     unsigned int m_maxTime;

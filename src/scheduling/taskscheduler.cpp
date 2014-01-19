@@ -18,6 +18,21 @@ void TaskScheduler::schedule(unsigned int machineCount, QList<int> jobDurations)
     assignJobs();
 }
 
+QVariantList TaskScheduler::getResults()
+{
+    QVariantList results;
+    for (auto machine : m_machines)
+    {
+        QVariantList innerList;
+        for (auto job : machine.data()->jobs())
+        {
+            innerList.append(QVariantList({job.data()->id(), job.data()->duration()}));
+        }
+        results.append(innerList);
+    }
+    return results;
+}
+
 void TaskScheduler::initializeMachines(const unsigned int size)
 {
     if (size == 0)
