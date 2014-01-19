@@ -11,10 +11,10 @@ TaskScheduler::TaskScheduler(QObject *parent)
 
 void TaskScheduler::schedule(unsigned int machineCount, QList<int> jobDurations)
 {
-    initializeMachines(machineCount);
     initializeJobs(jobDurations);
+    calculateMaxTime(machineCount);
+    initializeMachines(machineCount);
 
-    calculateMaxTime();
     assignJobs();
 }
 
@@ -59,7 +59,7 @@ void TaskScheduler::initializeJobs(QList<int> jobDurations)
     }
 }
 
-void TaskScheduler::calculateMaxTime()
+void TaskScheduler::calculateMaxTime(unsigned int machineCount)
 {
     unsigned int maxTime = 0;
     unsigned int totalDuration = 0;
@@ -68,7 +68,7 @@ void TaskScheduler::calculateMaxTime()
         maxTime = std::max(maxTime, job.data()->duration());
         totalDuration += job.data()->duration();
     }
-    totalDuration /= m_machines.size();
+    totalDuration /= machineCount;
 
     m_maxTime = std::max(maxTime, totalDuration);
 }

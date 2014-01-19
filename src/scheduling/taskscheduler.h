@@ -25,7 +25,7 @@ private:
 
     void initializeMachines(const unsigned int );
     void initializeJobs(QList<int> );
-    void calculateMaxTime();
+    void calculateMaxTime(unsigned int machineCount);
     void assignJobs();
 };
 
