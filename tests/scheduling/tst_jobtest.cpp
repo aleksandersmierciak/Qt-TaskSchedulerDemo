@@ -50,12 +50,12 @@ void JobTest::testSplittedJobsDuration()
 {
     Job first = Job(1, 5);
     first.split(3);
-    QVERIFY(first.duration() == 3);
+    QVERIFY(first.duration() == 2);
 }
 
 void JobTest::testSplittedJobsDuration2()
 {
     Job first = Job(1, 5);
     QSharedPointer<Job> second = first.split(3);
-    QVERIFY(second.data()->duration() == 2);
+    QVERIFY(second.data()->duration() == 3);
 }

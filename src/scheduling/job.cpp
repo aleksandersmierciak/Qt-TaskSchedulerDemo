@@ -22,8 +22,6 @@ unsigned int Job::duration() const
 
 QSharedPointer<Job> Job::split(const unsigned int firstDuration)
 {
-    unsigned int secondDuration = m_duration - firstDuration;
-    m_duration = firstDuration;
-    QSharedPointer<Job> secondJob = QSharedPointer<Job>(new Job(m_id, secondDuration));
-    return secondJob;
+    m_duration -= firstDuration;
+    return QSharedPointer<Job>(new Job(m_id, firstDuration));
 }
