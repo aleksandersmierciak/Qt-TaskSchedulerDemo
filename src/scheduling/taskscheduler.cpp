@@ -76,16 +76,17 @@ void TaskScheduler::calculateMaxTime(unsigned int machineCount)
 void TaskScheduler::assignJobs()
 {
     QListIterator<QSharedPointer<Machine> > machineIterator(m_machines);
-    QListIterator<QSharedPointer<Job> > jobIterator(m_jobs);
+    QMutableListIterator<QSharedPointer<Job> > jobIterator(m_jobs);
     while (machineIterator.hasNext())
     {
         Machine &machine = *machineIterator.next();
         while (jobIterator.hasNext())
         {
-            QSharedPointer<Job> job = jobIterator.next();
+            QSharedPointer<Job> job = jobIterator.peekNext();
             if (machine.canAdd(job))
             {
                 machine.add(job);
+                jobIterator.next();
             }
             else
             {
@@ -93,9 +94,10 @@ void TaskScheduler::assignJobs()
                 if (durationLeft > 0)
                 {
                     QSharedPointer<Job> splitJob = job.data()->split(durationLeft);
+                    jobIterator.insert(splitJob);
                     machine.add(splitJob);
-                    break;
                 }
+                break;
             }
         }
     }
