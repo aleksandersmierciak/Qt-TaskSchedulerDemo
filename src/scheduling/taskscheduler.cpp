@@ -64,15 +64,15 @@ void TaskScheduler::initializeJobs(QList<int> jobDurations)
 unsigned int TaskScheduler::calculateMaxTime(const unsigned int machineCount)
 {
     unsigned int maxSingleTime = 0;
-    unsigned int totalDuration = 0;
+    unsigned int meanTimePerMachine = 0;
     for (auto job : m_jobs)
     {
         maxSingleTime = std::max(maxSingleTime, job.data()->duration());
-        totalDuration += job.data()->duration();
+        meanTimePerMachine += job.data()->duration();
     }
-    totalDuration /= machineCount;
 
-    return std::max(maxSingleTime, totalDuration);
+    meanTimePerMachine = (int) std::ceil((double)meanTimePerMachine / machineCount);
+    return std::max(maxSingleTime, meanTimePerMachine);
 }
 
 void TaskScheduler::assignJobs()
