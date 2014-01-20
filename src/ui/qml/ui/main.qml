@@ -129,8 +129,11 @@ ApplicationWindow {
             antialiasing: true
             enabled: false
 
-            property int blockCount: 30
-            property int block: canvas.width / blockCount
+            property int verticalBlockCount: 30
+            property int horizontalBlockCount: 30
+            property real verticalBlockSize: (canvas.height - 2 * graphMargin) / verticalBlockCount
+            property real horizontalBlockSize: (canvas.width - 2 * graphMargin) / horizontalBlockCount
+            property int graphMargin: 20
             property var context
 
             property var colors: ['blueviolet', 'limegreen', 'crimson', 'orange', 'hotpink', 'tomato', 'darkturquoise', 'olive', 'burlywood', 'aquamarine', 'lightseagreen', 'brown', 'burlywood']
@@ -161,9 +164,9 @@ ApplicationWindow {
             function drawAxes() {
                 context.lineWidth = 5
                 context.beginPath();
-                context.moveTo( block, block)
-                context.lineTo( block, canvas.height - block)
-                context.lineTo(canvas.width - block, canvas.height - block)
+                context.moveTo(graphMargin, graphMargin)
+                context.lineTo(graphMargin, canvas.height - graphMargin)
+                context.lineTo(canvas.width - graphMargin, canvas.height - graphMargin)
                 context.strokeStyle = "#EE000000"
                 context.stroke()
             }
@@ -171,18 +174,30 @@ ApplicationWindow {
             function drawGrid() {
                 context.lineWidth = 2
                 context.beginPath();
-                // Vertical grid lines
-                for (var i = blockCount - 1; i > 0; --i) {
-                    context.moveTo( block + i * block, block)
-                    context.lineTo( block + i * block, canvas.height - block)
-                }
-                // Horizontal grid lines
-                for (var j = 2; j < blockCount; ++j) {
-                    context.moveTo( block, canvas.height - j * block)
-                    context.lineTo( canvas.width - block, canvas.height - j * block)
-                }
+                drawGridVerticalLines()
+                drawGridHorizontalLines()
                 context.strokeStyle = "#44000000"
                 context.stroke()
+            }
+
+            function drawGridVerticalLines() {
+                var y0 = canvas.height - graphMargin
+                var yn = graphMargin
+                for (var i = 1; i < horizontalBlockCount; ++i) {
+                    var x = graphMargin + i * horizontalBlockSize
+                    context.moveTo(x, y0)
+                    context.lineTo(x, yn)
+                }
+            }
+
+            function drawGridHorizontalLines() {
+                var x0 = graphMargin
+                var xn = canvas.width - graphMargin
+                for (var j = 1; j < verticalBlockCount; ++j) {
+                    var y = canvas.height - graphMargin - j * verticalBlockSize
+                    context.moveTo(x0, y)
+                    context.lineTo(xn, y)
+                }
             }
 
             function drawData() {
@@ -192,22 +207,22 @@ ApplicationWindow {
                 console.log(results.length + " machines found")
                 for (var machine = 0; machine < results.length; ++machine) {
                     console.log("Drawing series #" + machine)
-                    drawSeries(results[machine], block, canvas.height - 2 * block * (machine + 2))
+                    drawSeries(results[machine], graphMargin, canvas.height - graphMargin - verticalBlockSize * (machine + 2))
                 }
             }
 
             function drawSeries(machine, x, y) {
-                console.log(machine.length + " jobs found")
+                console.log("Machine: " + machine.length + " jobs")
                 for (var job = 0; job < machine.length; ++job) {
                     drawJob(machine[job][0], machine[job][1], x, y)
-                    x += block * machine[job][1]
+                    x += horizontalBlockSize * machine[job][1]
                 }
             }
 
             function drawJob(id, duration, x, y) {
                 context.beginPath();
                 console.log("Job: id " + id + ", color " + colors[id] + ", duration " + duration)
-                context.rect(x, y, duration * block, block)
+                context.rect(x, y, duration * horizontalBlockSize, verticalBlockSize)
                 context.fillStyle = colors[id]
                 context.fill()
                 context.lineWidth = 2
