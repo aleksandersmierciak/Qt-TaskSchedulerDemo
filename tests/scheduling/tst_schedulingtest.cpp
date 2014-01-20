@@ -80,10 +80,10 @@ void SchedulingTest::testCanScheduleMultipleTimes_data()
     QTest::addColumn<int>("machineDuration");
     QTest::addColumn<QList<int> >("jobDurations");
 
-    QTest::newRow("more_machines")  << (uint)15 << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    QTest::newRow("more_jobs")      << (uint)3  << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    QTest::newRow("single_machine") << (uint)1  << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-    QTest::newRow("large_job")      << (uint)10 << QList<int>({150});
+    QTest::newRow("more_machines")  << 15 << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    QTest::newRow("more_jobs")      << 3  << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    QTest::newRow("single_machine") << 1  << QList<int>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+    QTest::newRow("large_job")      << 10 << QList<int>({150});
 }
 
 void SchedulingTest::testCanScheduleMultipleTimes()
