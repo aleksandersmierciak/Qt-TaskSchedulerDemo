@@ -129,7 +129,7 @@ ApplicationWindow {
             antialiasing: true
             enabled: false
 
-            property int verticalBlockCount: 30
+            property int verticalBlockCount: 10
             property int horizontalBlockCount: 30
             property real verticalBlockSize: (canvas.height - 2 * graphMargin) / verticalBlockCount
             property real horizontalBlockSize: (canvas.width - 2 * graphMargin) / horizontalBlockCount
@@ -151,6 +151,7 @@ ApplicationWindow {
             onPaint: drawChart()
 
             function drawChart() {
+                console.log("Drawing chart\t", width - 2 * graphMargin, "x", height - 2 * graphMargin, "usable space.")
                 context = canvas.getContext("2d")
                 context.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -162,6 +163,7 @@ ApplicationWindow {
             }
 
             function drawAxes() {
+                console.log("Drawing axes")
                 context.lineWidth = 5
                 context.beginPath();
                 context.moveTo(graphMargin, graphMargin)
@@ -172,6 +174,7 @@ ApplicationWindow {
             }
 
             function drawGrid() {
+                console.log("Drawing grid \t", horizontalBlockCount, "vertical lines and", verticalBlockCount, "horizontal lines.")
                 context.lineWidth = 2
                 context.beginPath();
                 drawGridVerticalLines()
@@ -204,15 +207,13 @@ ApplicationWindow {
                 console.log("Drawing data")
                 context.lineWidth = 5
                 var results = taskScheduler.getResults()
-                console.log(results.length + " machines found")
                 for (var machine = 0; machine < results.length; ++machine) {
-                    console.log("Drawing series #" + machine)
+                    console.log("Drawing series\t", "#" + machine)
                     drawSeries(results[machine], graphMargin, canvas.height - graphMargin - verticalBlockSize * (machine + 2))
                 }
             }
 
             function drawSeries(machine, x, y) {
-                console.log("Machine: " + machine.length + " jobs")
                 for (var job = 0; job < machine.length; ++job) {
                     drawJob(machine[job][0], machine[job][1], x, y)
                     x += horizontalBlockSize * machine[job][1]
@@ -221,7 +222,7 @@ ApplicationWindow {
 
             function drawJob(id, duration, x, y) {
                 context.beginPath();
-                console.log("Job: id " + id + ", color " + colors[id] + ", duration " + duration)
+                console.log("Drawing job  \t", "#" + id, colors[id], duration, "time units")
                 context.rect(x, y, duration * horizontalBlockSize, verticalBlockSize)
                 context.fillStyle = colors[id]
                 context.fill()
