@@ -29,8 +29,8 @@ ApplicationWindow {
                 TextField {
                     text: duration
                     validator: IntValidator {bottom: 1; top: 100;}
-                    onFocusChanged: {
-                        if (focus == false) {
+                    onTextChanged: {
+                        if (acceptableInput == true) {
                             jobModel.setProperty(index, "duration", parseInt(text, 10))
                         }
                     }
