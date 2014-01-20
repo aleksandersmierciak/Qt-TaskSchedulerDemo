@@ -129,11 +129,11 @@ ApplicationWindow {
             antialiasing: true
             enabled: false
 
-            property int verticalBlockCount: 10
+            property int verticalBlockCount: 30
             property int horizontalBlockCount: 30
             property real verticalBlockSize: (canvas.height - 2 * graphMargin) / verticalBlockCount
             property real horizontalBlockSize: (canvas.width - 2 * graphMargin) / horizontalBlockCount
-            property int graphMargin: 20
+            property int graphMargin: 40
             property var context
 
             property var colors: ['blueviolet', 'limegreen', 'crimson', 'orange', 'hotpink', 'tomato', 'darkturquoise', 'olive', 'burlywood', 'aquamarine', 'lightseagreen', 'brown', 'burlywood']
@@ -209,8 +209,20 @@ ApplicationWindow {
                 var results = taskScheduler.getResults()
                 for (var machine = 0; machine < results.length; ++machine) {
                     console.log("Drawing series\t", "#" + machine)
+                    drawId(machine)
                     drawSeries(results[machine], graphMargin, canvas.height - graphMargin - verticalBlockSize * (machine + 2))
                 }
+            }
+
+            function drawId(machine) {
+                var textWidth = context.measureText(machine).width
+                var textHeight = 20
+                context.beginPath()
+                context.font = textHeight + "px sans-serif"
+                context.fillStyle = "black"
+                var x = graphMargin - textWidth - 5
+                var y = height - graphMargin - (machine + 1) * verticalBlockSize - 0.5 * textHeight
+                context.fillText(machine + 1, x, y)
             }
 
             function drawSeries(machine, x, y) {
