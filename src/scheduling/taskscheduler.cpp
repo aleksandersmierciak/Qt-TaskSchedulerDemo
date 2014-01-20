@@ -12,7 +12,6 @@ TaskScheduler::TaskScheduler(QObject *parent)
 void TaskScheduler::schedule(unsigned int machineCount, QList<int> jobDurations)
 {
     initializeJobs(jobDurations);
-    calculateMaxTime(machineCount);
     initializeMachines(machineCount);
 
     assignJobs();
@@ -39,10 +38,13 @@ void TaskScheduler::initializeMachines(const unsigned int size)
     {
         throw std::invalid_argument("One or more machines need to be provided");
     }
+
+    const unsigned int maxTime = calculateMaxTime(size);
+
     m_machines.clear();
     for (unsigned int i = 0; i < size; ++i)
     {
-        m_machines.append(QSharedPointer<Machine>(new Machine(i, m_maxTime)));
+        m_machines.append(QSharedPointer<Machine>(new Machine(i, maxTime)));
     }
 }
 
@@ -59,18 +61,18 @@ void TaskScheduler::initializeJobs(QList<int> jobDurations)
     }
 }
 
-void TaskScheduler::calculateMaxTime(unsigned int machineCount)
+unsigned int TaskScheduler::calculateMaxTime(const unsigned int machineCount)
 {
-    unsigned int maxTime = 0;
+    unsigned int maxSingleTime = 0;
     unsigned int totalDuration = 0;
     for (auto job : m_jobs)
     {
-        maxTime = std::max(maxTime, job.data()->duration());
+        maxSingleTime = std::max(maxSingleTime, job.data()->duration());
         totalDuration += job.data()->duration();
     }
     totalDuration /= machineCount;
 
-    m_maxTime = std::max(maxTime, totalDuration);
+    return std::max(maxSingleTime, totalDuration);
 }
 
 void TaskScheduler::assignJobs()
