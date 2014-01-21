@@ -24,6 +24,7 @@ ApplicationWindow {
             MenuSeparator { }
             MenuItem {
                 text: qsTr("Quit")
+                onTriggered: Qt.quit()
             }
         }
         Menu {
