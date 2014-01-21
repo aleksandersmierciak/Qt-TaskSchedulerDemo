@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
+import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.1
 
 ApplicationWindow {
@@ -17,6 +18,9 @@ ApplicationWindow {
             MenuSeparator { }
             MenuItem {
                 text: qsTr("Save")
+                onTriggered: {
+                    saveCanvasDialog.open()
+                }
             }
             MenuItem {
                 text: qsTr("Load")
@@ -32,6 +36,23 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("About TaskScheduler")
             }
+        }
+    }
+
+    FileDialog {
+        id: saveCanvasDialog
+        title: "Choose a file"
+        selectExisting: false
+        onAccepted: {
+            var fileName = fileUrl.toString().slice(7)
+            if (canvas.save(fileName)) {
+                console.log("Saved canvas to", fileName)
+            } else {
+                console.log("Failed to save to", fileName)
+            }
+        }
+        onRejected: {
+            console.log("Canceled saving")
         }
     }
 
@@ -155,6 +176,7 @@ ApplicationWindow {
             id: canvas
             antialiasing: true
             enabled: false
+            renderStrategy: Canvas.Threaded
 
             property int verticalBlockCount: 30
             property int horizontalBlockCount: 30
