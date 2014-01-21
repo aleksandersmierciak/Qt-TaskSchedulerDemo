@@ -147,7 +147,7 @@ ApplicationWindow {
 
                 canvas.enabled = true
                 taskScheduler.schedule(parseInt(machineCount.text, 10), parameters)
-                canvas.drawChart()
+                canvas.results = taskScheduler.getResults()
             }
 
             Layout.column: 0
@@ -187,6 +187,7 @@ ApplicationWindow {
             property real horizontalBlockSize: (canvas.width - 2 * graphMargin) / horizontalBlockCount
             property int graphMargin: 40
             property var context
+            property var results
 
             property var colors: ['blueviolet', 'limegreen', 'crimson', 'orange', 'hotpink', 'tomato', 'darkturquoise', 'olive', 'burlywood', 'aquamarine', 'lightseagreen', 'brown', 'burlywood']
 
@@ -201,8 +202,22 @@ ApplicationWindow {
             Layout.rowSpan: 6
 
             onPaint: drawChart()
+            onResultsChanged: {
+                if (results !== undefined) {
+                    drawChart()
+                }
+            }
+
+            function schedule() {
+                console.log("Getting results")
+                results = taskScheduler.getResults()
+            }
 
             function drawChart() {
+                if (results === undefined) {
+                    return
+                }
+
                 console.log("Drawing chart\t", width - 2 * graphMargin, "x", height - 2 * graphMargin, "usable space.")
                 context = canvas.getContext("2d")
                 context.clearRect(0, 0, canvas.width, canvas.height)
@@ -258,7 +273,6 @@ ApplicationWindow {
             function drawData() {
                 console.log("Drawing data")
                 context.lineWidth = 5
-                var results = taskScheduler.getResults()
                 for (var machine = 0; machine < results.length; ++machine) {
                     console.log("Drawing series\t", "#" + machine)
                     drawId(machine)
