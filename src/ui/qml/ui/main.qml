@@ -8,6 +8,32 @@ ApplicationWindow {
     width: 640
     height: 480
 
+    menuBar: MenuBar {
+        Menu {
+            title: qsTr("File")
+            MenuItem {
+                text: qsTr("New")
+            }
+            MenuSeparator { }
+            MenuItem {
+                text: qsTr("Save")
+            }
+            MenuItem {
+                text: qsTr("Load")
+            }
+            MenuSeparator { }
+            MenuItem {
+                text: qsTr("Quit")
+            }
+        }
+        Menu {
+            title: qsTr("Help")
+            MenuItem {
+                text: qsTr("About TaskScheduler")
+            }
+        }
+    }
+
     ListModel {
         id: jobModel
         property int currentIndex: 0
