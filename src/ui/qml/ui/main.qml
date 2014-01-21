@@ -27,9 +27,17 @@ ApplicationWindow {
             }
             MenuItem {
                 text: qsTr("Save data")
+                onTriggered: {
+                    if (canvas.results) {
+                        saveDataDialog.open()
+                    }
+                }
             }
             MenuItem {
                 text: qsTr("Load data")
+                onTriggered: {
+                    loadDataDialog.open()
+                }
             }
             MenuSeparator { }
             MenuItem {
@@ -60,6 +68,51 @@ ApplicationWindow {
         onRejected: {
             console.log("Canceled saving")
         }
+    }
+
+    FileDialog {
+        id: saveDataDialog
+        title: "Choose a file"
+        selectExisting: false
+        onAccepted: {
+            var fileName = fileUrl.toString().slice(7)
+            taskScheduler.saveToFile(fileName, readInputs())
+            console.log("Saved data to", fileName)
+        }
+        onRejected: {
+            console.log("Canceled saving")
+        }
+    }
+
+    FileDialog {
+        id: loadDataDialog
+        title: "Choose a file"
+        onAccepted: {
+            var fileName = fileUrl.toString().slice(7)
+            writeInputs(taskScheduler.loadFromFile(fileName))
+            console.log("Loaded data from", fileName)
+        }
+        onRejected: {
+            console.log("Canceled loading")
+        }
+    }
+
+    function readInputs() {
+        var data = []
+        data[0] = parseInt(machineCount.text, 10)
+        for (var i = 1; i < jobs.model.count; ++i) {
+            data[i] = parseInt(jobs.model.get(i).duration, 10)
+        }
+        return data
+    }
+
+    function writeInputs(data) {
+        machineCount.text = data[0];
+        jobs.model.clear()
+        for (var i = 1; i < data.length; ++i) {
+            jobs.model.append({"name": i, "duration": data[i]})
+        }
+        jobs.update()
     }
 
     ListModel {
