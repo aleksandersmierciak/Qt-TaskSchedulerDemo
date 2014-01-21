@@ -14,6 +14,9 @@ ApplicationWindow {
             title: qsTr("File")
             MenuItem {
                 text: qsTr("New")
+                onTriggered: {
+                    canvas.results = null
+                }
             }
             MenuSeparator { }
             MenuItem {
@@ -145,7 +148,6 @@ ApplicationWindow {
                 for(var i = 0; i < jobs.model.count; ++i)
                     parameters[i] = parseInt(jobs.model.get(i).duration, 10)
 
-                canvas.enabled = true
                 taskScheduler.schedule(parseInt(machineCount.text, 10), parameters)
                 canvas.results = taskScheduler.getResults()
             }
@@ -178,7 +180,6 @@ ApplicationWindow {
         Canvas {
             id: canvas
             antialiasing: true
-            enabled: false
             renderStrategy: Canvas.Threaded
 
             property int verticalBlockCount: 30
@@ -201,32 +202,35 @@ ApplicationWindow {
             Layout.row: 0
             Layout.rowSpan: 6
 
-            onPaint: drawChart()
-            onResultsChanged: {
-                if (results !== undefined) {
+            onPaint: updateCanvas()
+            onResultsChanged: updateCanvas()
+
+            onAvailableChanged: {
+                context = canvas.getContext("2d")
+            }
+
+            function updateCanvas() {
+                if (results) {
                     drawChart()
+                    canvas.requestPaint()
+                } else {
+                    clearChart()
+                    canvas.requestPaint()
                 }
             }
 
-            function schedule() {
-                console.log("Getting results")
-                results = taskScheduler.getResults()
+            function clearChart() {
+                context.clearRect(0, 0, canvas.width, canvas.height)
             }
 
             function drawChart() {
-                if (results === undefined) {
-                    return
-                }
-
                 console.log("Drawing chart\t", width - 2 * graphMargin, "x", height - 2 * graphMargin, "usable space.")
-                context = canvas.getContext("2d")
-                context.clearRect(0, 0, canvas.width, canvas.height)
+                clearChart()
 
                 drawAxes()
                 drawGrid()
                 drawData()
                 drawLegend()
-                canvas.requestPaint()
             }
 
             function drawAxes() {
