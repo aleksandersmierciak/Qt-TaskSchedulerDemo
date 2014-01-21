@@ -1,5 +1,8 @@
 #include <stdexcept>
 #include <QDebug>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QListIterator>
 #include "taskscheduler.h"
 
@@ -30,6 +33,26 @@ QVariantList TaskScheduler::getResults()
         results.append(QVariant(innerList));
     }
     return results;
+}
+
+void TaskScheduler::saveToFile(QString fileName, QVariantList data)
+{
+    QJsonArray array = QJsonArray::fromVariantList(data);
+    QJsonDocument document = QJsonDocument(array);
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    file.write(document.toJson());
+    file.close();
+}
+
+QVariant TaskScheduler::loadFromFile(QString fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray fileContent = file.readAll();
+    QJsonDocument document = QJsonDocument::fromJson(fileContent);
+    file.close();
+    return document.toVariant();
 }
 
 void TaskScheduler::initializeMachines(const unsigned int size)

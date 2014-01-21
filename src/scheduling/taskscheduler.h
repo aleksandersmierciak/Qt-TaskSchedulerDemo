@@ -17,6 +17,8 @@ public:
 
     Q_INVOKABLE void schedule(unsigned int , QList<int> );
     Q_INVOKABLE QVariantList getResults();
+    Q_INVOKABLE void saveToFile(QString , QVariantList );
+    Q_INVOKABLE QVariant loadFromFile(QString );
 
 private:
     unsigned int m_maxTime;
