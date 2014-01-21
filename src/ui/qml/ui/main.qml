@@ -17,13 +17,16 @@ ApplicationWindow {
             }
             MenuSeparator { }
             MenuItem {
-                text: qsTr("Save")
+                text: qsTr("Save image")
                 onTriggered: {
                     saveCanvasDialog.open()
                 }
             }
             MenuItem {
-                text: qsTr("Load")
+                text: qsTr("Save data")
+            }
+            MenuItem {
+                text: qsTr("Load data")
             }
             MenuSeparator { }
             MenuItem {
