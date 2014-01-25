@@ -117,8 +117,9 @@ ApplicationWindow {
 
     function validateInputs() {
         var machines = parseInt(machineCount.text, 10)
-        if (machines === 0 ||
+        if (machineCount.text === "" ||
                 jobs.count === 0 ||
+                !machines ||
                 machines > jobs.count) {
             scheduleButton.enabled = false
         } else {
