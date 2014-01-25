@@ -281,24 +281,27 @@ ApplicationWindow {
             Layout.row: 0
             Layout.rowSpan: 6
 
-            onPaint: updateCanvas()
-            onResultsChanged: updateCanvas()
-
             onAvailableChanged: {
                 context = canvas.getContext("2d")
             }
 
+            onWidthChanged: requestPaint()
+            onHeightChanged: requestPaint()
+            onResultsChanged: requestPaint()
+
+            onPaint: updateCanvas()
+
             function updateCanvas() {
+                console.log("Updating canvas")
                 if (results) {
                     drawChart()
-                    canvas.requestPaint()
                 } else {
                     clearChart()
-                    canvas.requestPaint()
                 }
             }
 
             function clearChart() {
+                console.log("Clearing chart")
                 context.clearRect(0, 0, canvas.width, canvas.height)
             }
 
