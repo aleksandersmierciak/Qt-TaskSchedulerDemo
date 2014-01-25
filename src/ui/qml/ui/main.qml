@@ -115,6 +115,23 @@ ApplicationWindow {
         jobs.update()
     }
 
+    function validateInputs() {
+        var machines = parseInt(machineCount.text, 10)
+        if (machines === 0 ||
+                jobs.count === 0 ||
+                machines > jobs.count) {
+            scheduleButton.enabled = false
+        } else {
+            var isValid = true
+            for (var i = 0; i < jobs.count; ++i) {
+                if (jobs.model.get(i).duration === 0) {
+                    isValid = false
+                }
+            }
+            scheduleButton.enabled = isValid
+        }
+    }
+
     ListModel {
         id: jobModel
         property int currentIndex: 0
@@ -137,14 +154,15 @@ ApplicationWindow {
                     text: duration
                     validator: IntValidator {bottom: 1; top: 100;}
                     onTextChanged: {
-                        if (acceptableInput == true) {
-                            jobModel.setProperty(index, "duration", parseInt(text, 10))
-                        }
+                        jobModel.setProperty(index, "duration", parseInt(text, 10))
+                        validateInputs()
                     }
                 }
             }
         }
     }
+
+
 
     GridLayout {
         anchors.fill: parent
@@ -168,6 +186,10 @@ ApplicationWindow {
             Layout.column: 0
             Layout.row: 1
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+
+            onTextChanged: {
+                validateInputs()
+            }
         }
 
         Button {
@@ -185,7 +207,10 @@ ApplicationWindow {
         Button {
             text: qsTr("Remove job")
             onClicked: {
-                if (jobs.currentIndex > -1) jobModel.remove(jobs.currentIndex)
+                if (jobs.currentIndex > -1) {
+                    jobModel.remove(jobs.currentIndex)
+                    validateInputs()
+                }
             }
 
             Layout.column: 0
@@ -194,8 +219,9 @@ ApplicationWindow {
         }
 
         Button {
+            id: scheduleButton
+            enabled: false
             text: qsTr("Schedule")
-            enabled: jobModel.count > 0 && machineCount.text != ""
             onClicked: {
                 var parameters = []
                 for(var i = 0; i < jobs.model.count; ++i)
