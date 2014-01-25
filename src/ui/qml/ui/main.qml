@@ -181,7 +181,6 @@ ApplicationWindow {
             id: machineCount
             validator: IntValidator {bottom: 1; top: 100;}
             focus: true
-            text: "1"
 
             Layout.column: 0
             Layout.row: 1
