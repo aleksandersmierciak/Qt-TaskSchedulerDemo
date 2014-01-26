@@ -408,7 +408,7 @@ ApplicationWindow {
                 context.strokeStyle = "#AA000000"
                 context.stroke();
                 context.fillStyle = "#000000"
-                var text = "#" + id + ": " + duration
+                var text = "#" + (id + 1) + ": " + duration
                 var textWidth = context.measureText(text).width
                 var textHeight = Math.min(20, verticalBlockSize + 5)
                 context.font = textHeight + "px sans-serif"
