@@ -387,7 +387,7 @@ ApplicationWindow {
                 context.font = textHeight + "px sans-serif"
                 context.fillStyle = "black"
                 var x = graphMargin - textWidth - 5
-                var y = height - graphMargin - (machine + 1) * verticalBlockSize - 0.5 * textHeight
+                var y = height - graphMargin - (machine + 1.5) * verticalBlockSize + 0.5 * textHeight
                 context.fillText(machine + 1, x, y)
             }
 
@@ -407,6 +407,14 @@ ApplicationWindow {
                 context.lineWidth = 2
                 context.strokeStyle = "#AA000000"
                 context.stroke();
+                context.fillStyle = "#000000"
+                var text = "#" + id + ": " + duration
+                var textWidth = context.measureText(text).width
+                var textHeight = Math.min(20, verticalBlockSize + 5)
+                context.font = textHeight + "px sans-serif"
+                var textX = x + 0.5 * duration * horizontalBlockSize - 0.5 * textWidth
+                var textY = y + 0.5 * verticalBlockSize + 0.5 * textHeight
+                context.fillText(text, textX, textY)
             }
 
             function drawLegend() {
