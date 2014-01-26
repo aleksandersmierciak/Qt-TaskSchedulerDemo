@@ -163,8 +163,6 @@ ApplicationWindow {
         }
     }
 
-
-
     GridLayout {
         anchors.fill: parent
         anchors.margins: 10
@@ -310,6 +308,7 @@ ApplicationWindow {
                 clearChart()
 
                 drawAxes()
+                setGrid()
                 drawGrid()
                 drawData()
                 drawLegend()
@@ -324,6 +323,21 @@ ApplicationWindow {
                 context.lineTo(canvas.width - graphMargin, canvas.height - graphMargin)
                 context.strokeStyle = "#EE000000"
                 context.stroke()
+            }
+
+            function setGrid() {
+                var horizontalTemp = 0
+                for (var machine = 0; machine < results.length; ++machine) {
+                    var machineSum = 0
+                    for (var job = 0; job < results[machine].length; ++job) {
+                        machineSum += results[machine][job][1]
+                    }
+                    console.log(horizontalTemp, "?", machineSum)
+                    horizontalTemp = Math.max(horizontalTemp, machineSum)
+                }
+                verticalBlockCount = results.length + 2
+                horizontalBlockCount = horizontalTemp + 1
+                console.log(verticalBlockCount, horizontalBlockCount)
             }
 
             function drawGrid() {
